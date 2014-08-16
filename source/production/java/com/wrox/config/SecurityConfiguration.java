@@ -1,6 +1,9 @@
 package com.wrox.config;
 
-import com.wrox.site.UserService;
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +17,14 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.UserIdSource;
+import org.springframework.social.security.AuthenticationNameUserIdSource;
+import org.springframework.social.security.SocialUserDetailsService;
+import org.springframework.social.security.SpringSocialConfigurer;
 
-import javax.inject.Inject;
+import com.wrox.site.UserService;
+import com.wrox.site.social.SimpleSocialUsersDetailService;
 
 @Configuration
 @EnableWebMvcSecurity
@@ -24,7 +33,10 @@ import javax.inject.Inject;
         proxyTargetClass = false
 )
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter
-{
+{	
+	@Autowired
+	private ApplicationContext context;
+	
     @Inject UserService userService;
 
     @Bean
@@ -46,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     {
         builder
                 .userDetailsService(this.userService)
-                        .passwordEncoder(new BCryptPasswordEncoder())
+                        .passwordEncoder(passwordEncoder())
                 .and()
                 .eraseCredentials(true);
     }
@@ -86,6 +98,24 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
                         return !r.getServletPath().startsWith("/services/") &&
                                 ("POST".equals(m) || "PUT".equals(m) ||
                                         "DELETE".equals(m) || "PATCH".equals(m));
-                    });
+                    })
+                .and()
+                	.apply(new SpringSocialConfigurer());
     }
+    
+    @Bean
+	public SocialUserDetailsService socialUsersDetailService() {
+		return new SimpleSocialUsersDetailService(userDetailsService());
+	}
+    
+    @Bean
+	public UserIdSource userIdSource() {
+		return new AuthenticationNameUserIdSource();
+	}
+    
+    @Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+    
 }

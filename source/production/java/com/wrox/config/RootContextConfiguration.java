@@ -64,7 +64,7 @@ import java.util.concurrent.Executor;
         excludeFilters =
         @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
 )
-@Import({ SecurityConfiguration.class })
+@Import({ SecurityConfiguration.class, SocialConfiguration.class })
 public class RootContextConfiguration implements
         AsyncConfigurer, SchedulingConfigurer
 {
@@ -126,7 +126,7 @@ public class RootContextConfiguration implements
     }
 
     @Bean
-    public DataSource customerSupportDataSource()
+    public DataSource dataSource()
     {
         JndiDataSourceLookup lookup = new JndiDataSourceLookup();
         return lookup.getDataSource("jdbc/CustomerSupport");
@@ -146,7 +146,7 @@ public class RootContextConfiguration implements
         LocalContainerEntityManagerFactoryBean factory =
                 new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(adapter);
-        factory.setDataSource(this.customerSupportDataSource());
+        factory.setDataSource(this.dataSource());
         factory.setPackagesToScan("com.wrox.site.entities",
                 "com.wrox.site.converters");
         factory.setSharedCacheMode(SharedCacheMode.ENABLE_SELECTIVE);

@@ -6,9 +6,11 @@
 	bodyTitle="${signUpTitle}">
 	<spring:message code="message.signUp.instruction" />
 	<br />
-		<form:form method="post" modelAttribute="signUpForm">
+		<c:url var="registerUrl" value="/user/register" />
+		<form:form method="post" modelAttribute="signUpForm" action="${registerUrl} }">
 		
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		<input type="hidden" name="${_csrf.parameterName}"
+				value="${_csrf.token}" />
 		
 		<form:label path="username">
 				<spring:message code="field.signUp.username" />

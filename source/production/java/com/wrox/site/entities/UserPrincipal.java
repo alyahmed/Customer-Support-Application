@@ -47,7 +47,7 @@ public class UserPrincipal implements UserDetails, CredentialsContainer, Cloneab
     private String firstName;
     
     private String lastName;
-     
+    
     //Authorization Details
     private Set<UserAuthority> authorities = new HashSet<>();
     
