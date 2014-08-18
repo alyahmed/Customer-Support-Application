@@ -19,7 +19,9 @@ import org.springframework.social.ExpiredAuthorizationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
+import com.wrox.config.annotation.WebController;
+
+@WebController
 public class TwitterRevokedToken {
 
 	@RequestMapping("/twitter/revoked")

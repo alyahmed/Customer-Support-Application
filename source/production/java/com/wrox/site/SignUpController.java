@@ -50,7 +50,7 @@ public class SignUpController {
 	}
 	
 	
-	@RequestMapping(value = {"/signup", "/user/register" }, method = RequestMethod.POST)
+	@RequestMapping(value = {"/signup", "/user/register"}, method = RequestMethod.POST)
 	public ModelAndView registerUser(@Valid @ModelAttribute("signUpForm") SignUpForm signUpForm,
 									BindingResult result,
 									WebRequest request){

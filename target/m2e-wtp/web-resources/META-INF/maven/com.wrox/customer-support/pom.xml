@@ -23,8 +23,9 @@
 		<apache.httpcomponents.version>4.3.2</apache.httpcomponents.version>
 	
 		<spring.social.version>1.1.0.RELEASE</spring.social.version>
-		<spring.social.facebook.version>1.1.0.RELEASE</spring.social.facebook.version>
+		<spring.social.facebook.version>2.0.0.M1</spring.social.facebook.version>
 		<spring.social.twitter.version>1.1.0.RELEASE</spring.social.twitter.version>
+		<spring.social.linkedin.version>1.0.0.RELEASE </spring.social.linkedin.version>
 	</properties>
 
 	<repositories>
@@ -387,19 +388,26 @@
 			<artifactId>spring-social-web</artifactId>
 			<version>${spring.social.version} </version>
 		</dependency>
-		<!-- Spring Social Facebook -->
+		<!-- Spring Social Facebook Extension -->
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-facebook</artifactId>
 			<version>${spring.social.facebook.version}</version>
 		</dependency>
 
-		<!-- Spring Social Twitter -->
+		<!-- Spring Social Twitter Extension -->
 		<dependency>
 			<groupId>org.springframework.social</groupId>
 			<artifactId>spring-social-twitter</artifactId>
 			<version>${spring.social.twitter.version}</version>
 		</dependency>
+		
+		<!-- Spring Social Linkedin Extension -->
+		<dependency>
+        <groupId>org.springframework.social</groupId>
+        <artifactId>spring-social-linkedin</artifactId>
+        <version>${spring.social.linkedin.version}</version>
+    </dependency>
 		<!-- Unit Testing Framework -->
 		<dependency>
 			<groupId>junit</groupId>

@@ -18,12 +18,13 @@ package com.wrox.site.social.facebook;
 import javax.inject.Inject;
 
 import org.springframework.social.facebook.api.Facebook;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller
+import com.wrox.config.annotation.WebController;
+
+@WebController
 public class FacebookFeedController {
 
 	private final Facebook facebook;

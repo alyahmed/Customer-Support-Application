@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller
+import com.wrox.config.annotation.WebController;
+
+@WebController
 public class TwitterTimelineController {
 
 	private final Twitter twitter;

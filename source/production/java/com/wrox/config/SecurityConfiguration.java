@@ -17,6 +17,8 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.encrypt.Encryptors;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.social.UserIdSource;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
@@ -67,7 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     public void configure(WebSecurity security)
     {
         security.ignoring().antMatchers("/resource/**", "/favicon.ico ", 
-        		"/signup/**", "/user/register/**");
+        		"/signup/**", "/user/register/**", "/auth/**", "/disconnect/facebook");
     }
 
     @Override
@@ -116,6 +118,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter
     @Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+    
+    @Bean
+	public TextEncryptor textEncryptor() {
+		return Encryptors.noOpText();
 	}
     
 }

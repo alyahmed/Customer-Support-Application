@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
@@ -46,14 +45,24 @@ public class SocialConfiguration implements SocialConfigurer {
 	 * (org.springframework.social.config.annotation.ConnectionFactoryConfigurer
 	 * , org.springframework.core.env.Environment)
 	 */
+	
+	//Social Media API keys
+	private final String TWITTER_CONSUMER_KEY = "VtVh1EEoqYhHdau1bcpwNV4l5";
+	private final String TWITTER_CONSUMER_SECRET = "LpAhCggISjXZrQUviS0ntOXzYym087IThp4uVO78HXOmQia0PU";
+	
+	private final String FACEBOOK_APP_ID = "355447197940054";
+	private final String FACEBOOK_APP_SECRET = "66c8771a4d491b0714e3422215bb9a70";
+	
+	
+	
 
 	@Override
 	public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig,
 			Environment env) {
 		cfConfig.addConnectionFactory(new TwitterConnectionFactory(
-				"twitter.consumer.key", "twitter.consumer.secret"));
+				TWITTER_CONSUMER_KEY, TWITTER_CONSUMER_SECRET));
 		cfConfig.addConnectionFactory(new FacebookConnectionFactory(
-				"facebook.app.id", "facebook.app.secret"));
+				FACEBOOK_APP_ID, FACEBOOK_APP_SECRET));
 	}
 
 	@Override
@@ -67,6 +76,38 @@ public class SocialConfiguration implements SocialConfigurer {
 		return new JdbcUsersConnectionRepository(dataSource,
 				connectionFactoryLocator, Encryptors.noOpText());
 	}
+
+
+
+	/*
+	 * Web Controller and Filter beans
+	 * 
+	 * Controller offers status view at /connect/status. Must implement own view
+	 * 
+	 * Filters handle connection to service providers and reconnection incase
+	 * token expires
+	 */
+	@Bean
+	public ConnectController connectController(
+			ConnectionFactoryLocator connectionFactoryLocator,
+			ConnectionRepository connectionRepository) {
+		
+		SocialConnectController controller = new SocialConnectController(connectionFactoryLocator, connectionRepository);
+
+		controller.addInterceptor(new TweetAfterConnectInterceptor());
+		controller.addInterceptor(new PostToWallAfterConnectInterceptor());
+		return controller;
+	}
+	
+	
+	@Bean
+	public ReconnectFilter apiExceptionHandler(
+			UsersConnectionRepository usersConnectionRepository,
+			UserIdSource userIdSource) {
+		return new ReconnectFilter(usersConnectionRepository, userIdSource);
+	}
+	
+	
 
 	//
 	// API Binding Beans
@@ -87,38 +128,5 @@ public class SocialConfiguration implements SocialConfigurer {
 				.findPrimaryConnection(Twitter.class);
 		return connection != null ? connection.getApi() : null;
 	}
-
-	/*
-	 * Web Controller and Filter beans
-	 * 
-	 * Controller offers status view at /connect/status. Must implement own view
-	 * 
-	 * Filters handle connection to service providers and reconnection incase
-	 * token expires
-	 */
-	@Bean
-	public ConnectController connectController(
-			ConnectionFactoryLocator connectionFactoryLocator,
-			ConnectionRepository connectionRepository) {
-		
-		SocialConnectController controller = new SocialConnectController(connectionFactoryLocator, connectionRepository);
-//		ConnectController connectController = new ConnectController(
-//				connectionFactoryLocator, connectionRepository);
-//		connectController
-//				.addInterceptor(new PostToWallAfterConnectInterceptor());
-//		connectController.addInterceptor(new TweetAfterConnectInterceptor());
-//		return connectController;
-		controller.addInterceptor(new TweetAfterConnectInterceptor());
-		controller.addInterceptor(new PostToWallAfterConnectInterceptor());
-		return controller;
-	}
-
-	@Bean
-	public ReconnectFilter apiExceptionHandler(
-			UsersConnectionRepository usersConnectionRepository,
-			UserIdSource userIdSource) {
-		return new ReconnectFilter(usersConnectionRepository, userIdSource);
-	}
-	
 	
 }
