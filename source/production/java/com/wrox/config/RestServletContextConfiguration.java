@@ -3,6 +3,7 @@ package com.wrox.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.wrox.config.annotation.RestEndpoint;
 import com.wrox.config.annotation.RestEndpointAdvice;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +27,7 @@ import org.springframework.oxm.Marshaller;
 import org.springframework.oxm.Unmarshaller;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.SpringValidatorAdapter;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
@@ -34,6 +36,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 import javax.inject.Inject;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -60,7 +63,6 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter
             List<HttpMessageConverter<?>> converters
     ) {
         converters.add(new SourceHttpMessageConverter<>());
-
         MarshallingHttpMessageConverter xmlConverter =
                 new MarshallingHttpMessageConverter();
         xmlConverter.setSupportedMediaTypes(Arrays.asList(

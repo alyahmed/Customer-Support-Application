@@ -15,7 +15,9 @@
  */
 package com.wrox.site.social.twitter;
 
-public class MessageForm {
+import java.io.Serializable;
+
+public class MessageForm implements Serializable{
 	
 	private String to;
 	

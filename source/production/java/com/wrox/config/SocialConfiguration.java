@@ -19,12 +19,14 @@ import org.springframework.social.connect.ConnectionRepository;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
 import org.springframework.social.connect.web.ConnectController;
+import org.springframework.social.connect.web.DisconnectInterceptor;
 import org.springframework.social.connect.web.ReconnectFilter;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.twitter.api.Twitter;
 import org.springframework.social.twitter.connect.TwitterConnectionFactory;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 
 import com.wrox.site.social.SocialConnectController;
 import com.wrox.site.social.facebook.PostToWallAfterConnectInterceptor;
@@ -128,5 +130,6 @@ public class SocialConfiguration implements SocialConfigurer {
 				.findPrimaryConnection(Twitter.class);
 		return connection != null ? connection.getApi() : null;
 	}
+	
 	
 }

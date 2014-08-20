@@ -41,7 +41,9 @@ public class TwitterProfileController {
 		if (connection == null) {
 			return "redirect:/connect/twitter";
 		}
+		
 		model.addAttribute("profile", connection.getApi().userOperations().getUserProfile());
+		
 		return "twitter/profile";
 	}
 	
