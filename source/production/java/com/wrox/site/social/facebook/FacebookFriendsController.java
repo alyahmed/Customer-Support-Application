@@ -17,6 +17,8 @@ package com.wrox.site.social.facebook;
 
 import javax.inject.Inject;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,9 @@ import com.wrox.config.annotation.WebController;
 
 @WebController
 public class FacebookFriendsController {
-
+	
+	private static final Logger log = LogManager.getLogger(FacebookFriendsController.class);
+	
 	private final Facebook facebook;
 
 	@Inject
@@ -36,9 +40,13 @@ public class FacebookFriendsController {
 
 	@RequestMapping(value="/facebook/friends", method=RequestMethod.GET)
 	public String showFeed(Model model) {
+		log.info("GET /facebook/friends, adding friends and friendIds to model");
 		model.addAttribute("friends", facebook.friendOperations().getFriendProfiles());
 		model.addAttribute("friendIds", facebook.friendOperations().getFriendIds());
-
+		log.info("friends: " + facebook.friendOperations().getFriendProfiles());
+		log.info("friendIds: " + facebook.friendOperations().getFriendIds());
+		log.info(facebook.mediaOperations().getAlbums());
+		log.info("providing friends VIEW");
 		return "facebook/friends";
 	}
 	

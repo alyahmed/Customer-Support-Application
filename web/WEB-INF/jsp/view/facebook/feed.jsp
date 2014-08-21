@@ -10,7 +10,8 @@
 			<p>Post to your Facebook wall:</p>
 			<textarea id="message" name="message" rows="2" cols="60"></textarea>
 			<br />
-			<input type="submit" value="Post" />
+			<a href="javascript:void 0;"
+			onclick="postInvisibleForm('<c:url value="/logout" />', { });"> POST MSG </a>
 		</form:form>
 
 

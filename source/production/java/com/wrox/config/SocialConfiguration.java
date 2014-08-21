@@ -3,8 +3,10 @@ package com.wrox.config;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.core.env.Environment;
@@ -35,10 +37,11 @@ import com.wrox.site.social.twitter.TweetAfterConnectInterceptor;
 @Configuration
 @EnableSocial
 public class SocialConfiguration implements SocialConfigurer {
-
+	
+	
 	@Inject
 	private DataSource dataSource;
-
+	
 	/*
 	 * Social Configurer implementation methods
 	 * 
@@ -49,15 +52,11 @@ public class SocialConfiguration implements SocialConfigurer {
 	 */
 	
 	//Social Media API keys
-	private final String TWITTER_CONSUMER_KEY = "VtVh1EEoqYhHdau1bcpwNV4l5";
-	private final String TWITTER_CONSUMER_SECRET = "LpAhCggISjXZrQUviS0ntOXzYym087IThp4uVO78HXOmQia0PU";
+	private String TWITTER_CONSUMER_KEY = "VtVh1EEoqYhHdau1bcpwNV4l5";
+	private String TWITTER_CONSUMER_SECRET = "LpAhCggISjXZrQUviS0ntOXzYym087IThp4uVO78HXOmQia0PU";
+	private String FACEBOOK_APP_ID = "346118278872946";
+	private String FACEBOOK_APP_SECRET = "3a9f1899f2bb25b36db28317e07dcabf";
 	
-	private final String FACEBOOK_APP_ID = "355447197940054";
-	private final String FACEBOOK_APP_SECRET = "66c8771a4d491b0714e3422215bb9a70";
-	
-	
-	
-
 	@Override
 	public void addConnectionFactories(ConnectionFactoryConfigurer cfConfig,
 			Environment env) {

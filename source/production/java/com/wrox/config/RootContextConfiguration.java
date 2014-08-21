@@ -1,8 +1,15 @@
 package com.wrox.config;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import java.nio.charset.StandardCharsets;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
+import javax.sql.DataSource;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.MessageSource;
@@ -12,7 +19,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableLoadTimeWeaving;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.instrument.classloading.LoadTimeWeaver;
 import org.springframework.jdbc.datasource.lookup.JndiDataSourceLookup;
@@ -34,14 +43,9 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.validation.beanvalidation.MethodValidationPostProcessor;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 
-import javax.inject.Inject;
-import javax.persistence.SharedCacheMode;
-import javax.persistence.ValidationMode;
-import javax.sql.DataSource;
-import java.nio.charset.StandardCharsets;
-import java.util.Hashtable;
-import java.util.Map;
-import java.util.concurrent.Executor;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 @Configuration
 @EnableScheduling
@@ -64,16 +68,23 @@ import java.util.concurrent.Executor;
         excludeFilters =
         @ComponentScan.Filter({Controller.class, ControllerAdvice.class})
 )
+@PropertySource(value = { "classpath:/properties/application.properties"})
 @Import({ SecurityConfiguration.class, SocialConfiguration.class })
 public class RootContextConfiguration implements
         AsyncConfigurer, SchedulingConfigurer
 {
+	
     private static final Logger log = LogManager.getLogger();
     private static final Logger schedulingLogger =
             LogManager.getLogger(log.getName() + ".[scheduling]");
-
+    
+    @Inject Environment env;
+    
     @Inject LoadTimeWeaver loadTimeWeaver; // TODO: remove when SPR-10856 fixed
+    
 
+    
+    
     @Bean
     public MessageSource messageSource()
     {
@@ -129,7 +140,7 @@ public class RootContextConfiguration implements
     public DataSource dataSource()
     {
         JndiDataSourceLookup lookup = new JndiDataSourceLookup();
-        return lookup.getDataSource("jdbc/CustomerSupport");
+        return lookup.getDataSource(env.getProperty("database.jndi.lookup"));
     }
 
     @Bean
@@ -199,4 +210,6 @@ public class RootContextConfiguration implements
         log.info("Configuring scheduled method executor {}.", scheduler);
         registrar.setTaskScheduler(scheduler);
     }
-}
+    
+    
+}	
